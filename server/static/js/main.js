@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bootstrap modal
     const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     
+    // Get CSRF token from meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
     // Colors for different emotions
     const emotionColors = {
         'happy': '#4CAF50',
@@ -29,6 +32,30 @@ document.addEventListener('DOMContentLoaded', function() {
         'contempt': '#FF5722'
     };
     
+    // Secure fetch function that adds CSRF token and other security headers
+    function secureFetch(url, options = {}) {
+        const defaultOptions = {
+            credentials: 'same-origin', // Include cookies
+            cache: 'no-cache', // Don't cache requests
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            }
+        };
+        
+        // Merge the default options with any provided options
+        const mergedOptions = { 
+            ...defaultOptions,
+            ...options,
+            headers: {
+                ...defaultOptions.headers,
+                ...(options.headers || {})
+            }
+        };
+        
+        return fetch(url, mergedOptions);
+    }
+    
     // Fetch emotion statistics from the server
     function fetchEmotionStats() {
         loadingStats.style.display = 'block';
@@ -36,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessage.style.display = 'none';
         emptyDataMessage.style.display = 'none';
         
-        fetch('/api/emotion_stats')
+        secureFetch('/api/emotion_stats')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch statistics');
@@ -106,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const emotionDiv = document.createElement('div');
             emotionDiv.className = 'emotion-row';
             emotionDiv.innerHTML = `
-                <div class="emotion-label">${emotion}</div>
+                <div class="emotion-label">${sanitizeHtml(emotion)}</div>
                 <div class="progress">
                     <div class="progress-bar" 
                          role="progressbar" 
@@ -123,15 +150,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Simple HTML sanitizer for security
+    function sanitizeHtml(text) {
+        const element = document.createElement('div');
+        element.textContent = text;
+        return element.innerHTML;
+    }
+    
     // Clear all emotion data
     function clearData() {
-        fetch('/api/clear_data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        secureFetch('/api/clear_data', {
+            method: 'POST'
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to clear data: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.status === 'ok') {
                 // Show success message
@@ -151,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error clearing data:', error);
-            clearStatus.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            clearStatus.innerHTML = `<div class="alert alert-danger">Error: ${sanitizeHtml(error.message)}</div>`;
             clearStatus.style.display = 'block';
         });
     }
