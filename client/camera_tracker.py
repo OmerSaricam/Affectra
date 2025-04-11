@@ -2,6 +2,7 @@ import cv2
 import time
 from deepface import DeepFace
 from client.emotion_utils import EmotionSession
+import requests 
 
 def start_camera():
     cap = cv2.VideoCapture(0)
@@ -68,6 +69,17 @@ def start_camera():
                     print(f"📍 Session ended.")
                     summary = session.get_summary()
                     if summary:
+                        # Veriyi Flask sunucusuna POST et
+                        try:
+                            response = requests.post("http://localhost:5000/log", json=summary)
+                            if response.status_code == 200:
+                                print("✅ Session data sent to server.")
+                            else:
+                                print(f"⚠️ Failed to send data. Status: {response.status_code}")
+                        except Exception as e:
+                            print(f"⚠️ Error sending data to server: {e}")
+
+                        # Terminale yazdırmaya devam
                         print(f"\n📋 Session #{session_counter} Summary:")
                         print(f"🧾 Timestamp: {summary['timestamp']}")
                         print(f"⏱ Duration: {summary['duration_seconds']} sec")
