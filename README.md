@@ -1,104 +1,160 @@
 # Affectra Emotion Tracking Web UI
 
-This application provides a web-based user interface for emotion tracking using computer vision. It detects faces, analyzes emotions, and visualizes the emotion statistics over time.
+![Affectra Logo](assets/affectra-logo.png)
 
-## Features
+Affectra is a camera-based emotion tracking system with a web-based user interface.  
+It detects faces, analyzes facial emotions, tracks viewer sessions, and visualizes emotion statistics over time.
 
-- Real-time face detection and emotion analysis
-- Tracks emotion sessions and calculates statistics
-- Web UI for monitoring and visualization
-- Stores historical emotion data
-- Counts total number of visitors (sessions)
-- Option to clear stored data when needed
+---
+
+## 🖼️ Design Concept
+
+> The following image illustrates how Affectra could appear in a real-world setting.
+
+<!-- ![Affectra Screenshot](assets/affectra-image.png) -->
+<img src="assets/affectra-image.png" alt="Affectra Screenshot" width="500"/>
+
+---
+
+## ✨ Features
+
+- Real-time face detection and emotion analysis  
+- Session tracking with emotion distribution summary  
+- Web UI for live monitoring and data visualization  
+- CSV-based logging of historical emotion data  
+- Tracks total number of visitors (sessions)  
+- Option to clear stored data when needed  
 - Support for multiple camera sources:
   - Local webcam 
   - ESP32-CAM external camera
 
-## Requirements
+---
+
+## 🔐 Security Features
+
+This project includes several application-level security measures:
+
+- CSRF protection for all form submissions  
+- Secure HTTP headers (CSP, HSTS, X-Content-Type-Options, X-Frame-Options)  
+- Input validation and sanitization to prevent injection attacks  
+- Symmetric encryption using Fernet for sensitive data  
+- Robust error handling and sanitized structured logging  
+- Directory permission checks and secure file operations  
+
+---
+
+## ⚙️ Requirements
 
 - Python 3.7+
+- Flask
 - OpenCV
 - DeepFace
-- Flask
 - Pandas
 - NumPy
 
-## Setup
+---
 
-1. Install the required dependencies:
+## 🚀 Setup
 
-```bash
-pip install flask pandas numpy opencv-python deepface requests
-```
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-2. Make sure your webcam is connected and accessible
+2. Ensure your webcam is connected and accessible.
 
 3. (Optional) To use an ESP32-CAM:
-   - Flash the ESP32-CAM with the code from `esp32_cam/esp32_cam_streaming.ino`
-   - Update the WiFi credentials in the ESP32-CAM code
+   - Flash the ESP32-CAM using `esp32_cam/esp32_cam_streaming.ino`
+   - Update Wi-Fi credentials in the Arduino code
    - Connect the ESP32-CAM to your network
-   - Note the IP address of the ESP32-CAM
+   - Note the IP address displayed on the ESP32 serial monitor
 
-## Running the Application
+---
 
-Run the application with:
+## 🖥️ Running the Application
+
+Start the Flask web server:
 
 ```bash
-python run_app.py
+python server/app.py
+```
+
+Start the camera emotion tracker:
+
+```bash
+python client/camera_tracker.py
 ```
 
 Then open your browser and visit:
 
-```
-http://localhost:5000
-```
+[http://localhost:5000](http://localhost:5000)
 
-## Using the Interface
+---
 
-- The left panel shows the live camera feed with face detection and emotion labeling
-- The right panel displays statistics calculated from the stored emotion data:
-  - Total number of visitors (sessions)
-  - Dominant emotion across all sessions
+## 🎛️ Using the Interface
+
+- **Live Feed**: Left panel shows real-time camera feed with face and emotion labels  
+- **Session Statistics**: Right panel shows:
+  - Total number of sessions
+  - Most frequent emotion
   - Average session duration
-  - Distribution of emotions as percentages
-- Data Management section:
-  - "Refresh Statistics" button updates the statistics from the latest data
-  - "Clear All Data" button removes all stored emotion data (with confirmation)
-- Camera Selection section:
-  - Switch between webcam and ESP32-CAM sources
-  - Add new ESP32-CAM sources by providing their stream URL
+  - Emotion distribution as percentages
+- **Controls**:
+  - 🔄 Refresh Statistics
+  - 🧹 Clear All Data (with confirmation)
+- **Camera Selection**:
+  - Switch between webcam and ESP32-CAM
+  - Add new ESP32-CAM sources by entering their stream URL
 
-## Using ESP32-CAM
+---
 
-1. Flash the ESP32-CAM with the provided Arduino code
-2. Connect the ESP32-CAM to the same network as the computer running Affectra
-3. Note the IP address displayed on the ESP32-CAM's serial monitor
-4. In the Affectra web interface, click "Add ESP32-CAM" and enter the stream URL:
-   `http://<ESP32-CAM_IP>/stream`
-5. Select the ESP32-CAM from the camera list to switch to it
+## 📷 Using ESP32-CAM
 
-## How It Works
+1. Flash the ESP32-CAM with the provided Arduino code  
+2. Connect it to the same network as the Affectra server  
+3. Note the IP address from the serial monitor  
+4. In the UI, click “Add ESP32-CAM” and enter:
+   ```
+   http://<ESP32-CAM_IP>/stream
+   ```
+5. Select it from the list to start streaming
 
-1. The camera captures video frames from either webcam or ESP32-CAM
-2. DeepFace analyzes each frame to detect faces and emotions
-3. Emotion data is tracked in sessions and saved to a CSV file
-4. The web UI reads this data and calculates statistics for display
+---
 
-## Project Structure
+## 🧠 How It Works
 
-- `server/`: Contains the Flask web server
-  - `app.py`: Main server code
-  - `templates/`: HTML templates
-  - `static/`: CSS and JavaScript files
-  - `storage/`: CSV data storage
-- `client/`: Contains the emotion tracking code
-  - `camera_tracker.py`: Analyzes emotions from video frames
-  - `camera_provider.py`: Manages different camera sources
-  - `emotion_utils.py`: Utilities for emotion tracking
-- `esp32_cam/`: Contains Arduino code for ESP32-CAM streaming
+1. Camera captures frames from webcam or ESP32-CAM  
+2. DeepFace detects faces and classifies emotions  
+3. Affectra tracks each viewer session and logs:
+   - Session start/end time
+   - Duration in seconds
+   - Emotion percentages
+4. Web UI reads from CSV and updates statistics in real-time
 
-## Troubleshooting
+---
 
-- If the camera doesn't start, make sure it's not being used by another application
-- If emotions aren't detected, try adjusting lighting or positioning
-- If the web interface doesn't display, check that the server is running correctly
+## 📁 Project Structure
+
+```
+Affectra/
+├── server/
+│   ├── app.py
+│   ├── templates/
+│   ├── static/
+│   └── storage/
+├── client/
+│   ├── camera_tracker.py
+│   ├── camera_provider.py
+│   └── emotion_utils.py
+├── esp32_cam/
+│   └── esp32_cam_streaming.ino
+├── assets/
+│   ├── affectra-logo.png
+│   └── affectra-demo.png
+└── run_app.py
+```
+
+---
+
+
+![It works on my machine](assets/it-works-badge.png)
