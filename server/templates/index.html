@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affectra - Emotion Tracking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Affectra Emotion Tracking</h1>
+        
+        <div class="row">
+            <!-- Camera Feed Column -->
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Live Camera Feed</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="camera-container">
+                            <img src="{{ url_for('video_feed') }}" width="100%" alt="Camera Feed">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Emotion Statistics Column -->
+            <div class="col-md-5">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Emotion Statistics</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="loading-stats" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading statistics...</p>
+                        </div>
+                        
+                        <div id="stats-content" style="display: none;">
+                            <div class="mb-3">
+                                <h5>Dominant Emotion</h5>
+                                <div class="alert alert-info">
+                                    <span id="dominant-emotion" class="fs-4">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h5>Average Session Duration</h5>
+                                <div class="alert alert-warning">
+                                    <span id="avg-duration" class="fs-4">-</span> seconds
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h5>Emotion Percentages</h5>
+                                <div id="emotion-percentages">
+                                    <!-- Will be filled by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="error-message" class="alert alert-danger" style="display: none;">
+                            Failed to load statistics. Please try again later.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">Last Update</h4>
+                    </div>
+                    <div class="card-body">
+                        <p id="last-update">-</p>
+                        <button id="refresh-stats" class="btn btn-primary">Refresh Statistics</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
