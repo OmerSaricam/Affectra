@@ -18,18 +18,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     
     // Get CSRF token from meta tag
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     
-    // Colors for different emotions
+    // Colors for different emotions - use distinct colors for each emotion
     const emotionColors = {
-        'happy': '#4CAF50',
-        'sad': '#2196F3',
-        'angry': '#F44336',
-        'surprised': '#FF9800',
-        'fear': '#9C27B0',
-        'disgust': '#795548',
-        'neutral': '#607D8B',
-        'contempt': '#FF5722'
+        'happy': '#4CAF50',    // Green
+        'sad': '#2196F3',      // Blue
+        'angry': '#F44336',    // Red
+        'surprised': '#FF9800', // Orange
+        'fear': '#9C27B0',     // Purple
+        'disgust': '#795548',  // Brown
+        'neutral': '#607D8B',  // Gray-Blue
+        'contempt': '#FF5722'  // Deep Orange
     };
     
     // Secure fetch function that adds CSRF token and other security headers

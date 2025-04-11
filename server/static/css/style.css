@@ -139,4 +139,37 @@ h1 {
     h1 {
         font-size: 1.8rem;
     }
+}
+
+/* Emotion-specific colors */
+.emotion-happy {
+    background-color: #4CAF50 !important; /* Green */
+}
+
+.emotion-sad {
+    background-color: #2196F3 !important; /* Blue */
+}
+
+.emotion-angry {
+    background-color: #F44336 !important; /* Red */
+}
+
+.emotion-surprised {
+    background-color: #FF9800 !important; /* Orange */
+}
+
+.emotion-fear {
+    background-color: #9C27B0 !important; /* Purple */
+}
+
+.emotion-disgust {
+    background-color: #795548 !important; /* Brown */
+}
+
+.emotion-neutral {
+    background-color: #607D8B !important; /* Gray-Blue */
+}
+
+.emotion-contempt {
+    background-color: #FF5722 !important; /* Deep Orange */
 } 

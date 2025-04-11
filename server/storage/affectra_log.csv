@@ -1,8 +1,2 @@
 timestamp,duration_seconds,dominant_emotion,emotion_percentages
-2025-04-11T19:54:18.932742,5.83,sad,sad: 100.0%
-2025-04-11T19:54:46.729151,25.55,sad,"fear: 8.33%, sad: 66.67%, neutral: 25.0%"
-2025-04-11T19:55:38.084247,48.13,sad,"neutral: 21.74%, sad: 69.57%, angry: 8.7%"
-2025-04-11T19:56:12.521312,34.19,sad,"fear: 6.25%, sad: 81.25%, neutral: 6.25%, happy: 6.25%"
-2025-04-11T19:56:40.296884,27.67,happy,"fear: 15.38%, neutral: 15.38%, happy: 69.23%"
-2025-04-11T19:56:50.890706,5.25,happy,happy: 100.0%
-2025-04-11T19:57:19.863857,20.75,happy,"happy: 90.0%, sad: 10.0%"
+2025-04-11T20:25:15.194827,5.77,neutral,"sad: 33.33%, neutral: 66.67%"

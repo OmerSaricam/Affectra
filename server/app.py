@@ -177,19 +177,36 @@ def emotion_stats():
         overall_dominant = dominant_emotions.idxmax() if not dominant_emotions.empty else "unknown"
         
         # Parse and aggregate emotion percentages
-        emotion_totals = {}
-        for percentages_str in df['emotion_percentages']:
-            percentages = {}
-            for item in percentages_str.split(','):
-                emotion, value = item.strip().split(':')
-                emotion = emotion.strip()
-                value = float(value.strip(' %'))
-                if emotion not in emotion_totals:
-                    emotion_totals[emotion] = []
-                emotion_totals[emotion].append(value)
+        # This needs to be fixed to ensure percentages are calculated correctly
+        all_emotions = {}
+        total_observations = 0
         
-        # Calculate average percentage for each emotion
-        avg_percentages = {emotion: sum(values)/len(values) for emotion, values in emotion_totals.items()}
+        # First pass: collect all emotions and count total observations
+        for percentages_str in df['emotion_percentages']:
+            for item in percentages_str.split(','):
+                parts = item.strip().split(':')
+                if len(parts) == 2:
+                    emotion = parts[0].strip()
+                    value_str = parts[1].strip(' %')
+                    try:
+                        value = float(value_str)
+                        # Initialize emotion counter if not exists
+                        if emotion not in all_emotions:
+                            all_emotions[emotion] = 0
+                        # Add weighted value based on percentage
+                        all_emotions[emotion] += value
+                        total_observations += value
+                    except ValueError:
+                        logger.warning(f"Could not parse emotion value: {value_str}")
+        
+        # Calculate final percentages
+        if total_observations > 0:
+            avg_percentages = {
+                emotion: round((count / total_observations) * 100, 1) 
+                for emotion, count in all_emotions.items()
+            }
+        else:
+            avg_percentages = {}
         
         # Count number of visitors (rows in CSV)
         visitor_count = len(df)

@@ -46,3 +46,110 @@
 2025-04-11 19:57:19,889 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 19:57:19] "POST /log HTTP/1.1" 200 -
 2025-04-11 19:57:25,008 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 19:57:25] "GET /api/emotion_stats HTTP/1.1" 200 -
 2025-04-11 19:57:40,273 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 19:57:40] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:06:22,879 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.24.89:5000
+2025-04-11 20:06:22,879 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 20:06:22,879 - werkzeug - INFO -  * Restarting with stat
+2025-04-11 20:06:24,193 - werkzeug - WARNING -  * Debugger is active!
+2025-04-11 20:06:24,193 - werkzeug - INFO -  * Debugger PIN: 110-626-722
+2025-04-11 20:06:25,951 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:25] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:06:27,878 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:27] "GET / HTTP/1.1" 200 -
+2025-04-11 20:06:27,905 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-11 20:06:27,907 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:27] "[36mGET /static/images/affectra-logo.png HTTP/1.1[0m" 304 -
+2025-04-11 20:06:27,920 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:27] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-04-11 20:06:27,930 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:06:30,751 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:06:30] "GET /video_feed HTTP/1.1" 200 -
+2025-04-11 20:10:14,464 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.24.89:5000
+2025-04-11 20:10:14,465 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 20:10:14,465 - werkzeug - INFO -  * Restarting with stat
+2025-04-11 20:10:16,077 - werkzeug - WARNING -  * Debugger is active!
+2025-04-11 20:10:16,077 - werkzeug - INFO -  * Debugger PIN: 110-626-722
+2025-04-11 20:10:20,937 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:20] "GET / HTTP/1.1" 200 -
+2025-04-11 20:10:20,962 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:20] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-11 20:10:20,964 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:20] "[36mGET /static/images/affectra-logo.png HTTP/1.1[0m" 304 -
+2025-04-11 20:10:20,979 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:20] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-04-11 20:10:20,994 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:20] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:10:23,833 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:23] "GET /video_feed HTTP/1.1" 200 -
+2025-04-11 20:10:31,483 - affectra - INFO - Data cleared successfully
+2025-04-11 20:10:31,484 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:31] "POST /api/clear_data HTTP/1.1" 200 -
+2025-04-11 20:10:31,519 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:31] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:10:38,583 - affectra - INFO - Logged emotion session: sad, duration: 14.76s
+2025-04-11 20:10:38,584 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:38] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:10:40,150 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:40] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:10:51,008 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:10:51] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:11:16,465 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:16] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:11:20,990 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:20] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:11:21,287 - affectra - INFO - Logged emotion session: sad, duration: 34.36s
+2025-04-11 20:11:21,288 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:21] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:11:22,478 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:22] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:11:37,887 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:37] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:11:51,146 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:11:51] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:12:21,126 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:12:21] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:12:25,567 - affectra - INFO - Logged emotion session: sad, duration: 59.36s
+2025-04-11 20:12:25,567 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:12:25] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:12:51,138 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:12:51] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:13:27,179 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:13:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:14:00,137 - affectra - INFO - Logged emotion session: neutral, duration: 94.18s
+2025-04-11 20:14:00,138 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:14:00] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:14:27,174 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:14:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:15:01,708 - affectra - INFO - Logged emotion session: sad, duration: 61.41s
+2025-04-11 20:15:01,708 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:15:01] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:15:08,994 - affectra - INFO - Logged emotion session: fear, duration: 4.0s
+2025-04-11 20:15:08,995 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:15:08] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:15:27,152 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:15:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:16:27,145 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:16:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:16:29,910 - affectra - INFO - Logged emotion session: sad, duration: 72.74s
+2025-04-11 20:16:29,910 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:16:29] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:17:27,155 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:17:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:18:27,133 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:18:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:19:27,140 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:19:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:20:27,145 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:20:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:20:55,234 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.24.89:5000
+2025-04-11 20:20:55,234 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 20:20:55,235 - werkzeug - INFO -  * Restarting with stat
+2025-04-11 20:20:56,840 - werkzeug - WARNING -  * Debugger is active!
+2025-04-11 20:20:56,841 - werkzeug - INFO -  * Debugger PIN: 110-626-722
+2025-04-11 20:20:56,851 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:20:56] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:20:59,563 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:20:59] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:21:02,412 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:02] "GET / HTTP/1.1" 200 -
+2025-04-11 20:21:02,455 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-11 20:21:02,455 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:02] "[36mGET /static/images/affectra-logo.png HTTP/1.1[0m" 304 -
+2025-04-11 20:21:02,481 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-04-11 20:21:02,499 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:02] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:21:05,413 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:05] "GET /video_feed HTTP/1.1" 200 -
+2025-04-11 20:21:07,905 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:07] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:21:11,933 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:11] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:21:12,142 - affectra - INFO - Logged emotion session: neutral, duration: 6.73s
+2025-04-11 20:21:12,142 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:12] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:21:32,499 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:21:32] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:22:03,129 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:22:03] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:22:33,128 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:22:33] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:23:03,140 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:23:03] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:23:33,132 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:23:33] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:23:51,617 - affectra - INFO - Logged emotion session: sad, duration: 146.29s
+2025-04-11 20:23:51,617 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:23:51] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:24:27,148 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:24:27] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:24:34,469 - affectra - INFO - Logged emotion session: sad, duration: 42.69s
+2025-04-11 20:24:34,469 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:24:34] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:24:58,145 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:24:58] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:01,146 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:01] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:02,503 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:02] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:04,585 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:04] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:04,963 - affectra - INFO - Logged emotion session: sad, duration: 29.83s
+2025-04-11 20:25:04,963 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:04] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:25:06,212 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:06] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:09,336 - affectra - INFO - Data cleared successfully
+2025-04-11 20:25:09,338 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:09] "POST /api/clear_data HTTP/1.1" 200 -
+2025-04-11 20:25:09,349 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:09] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:11,894 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:11] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 20:25:15,202 - affectra - INFO - Logged emotion session: neutral, duration: 5.77s
+2025-04-11 20:25:15,202 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:15] "POST /log HTTP/1.1" 200 -
+2025-04-11 20:25:15,228 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:15] "GET /api/emotion_stats HTTP/1.1" 200 -
