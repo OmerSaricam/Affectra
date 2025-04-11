@@ -59,6 +59,30 @@ h1 {
     font-weight: bold;
 }
 
-#refresh-stats {
-    width: 100%;
+/* Style for the buttons */
+.btn-primary, .btn-danger {
+    font-weight: bold;
+}
+
+/* Style for the visitor count */
+#visitor-count {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Modal styles */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Clear status message styling */
+#clear-status .alert {
+    margin-bottom: 0;
+    margin-top: 10px;
 } 

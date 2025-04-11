@@ -61,10 +61,15 @@ def emotion_stats():
         df = pd.read_csv(LOG_PATH)
         
         if df.empty:
+            # Return default values for empty data instead of an error
             return jsonify({
-                "status": "error",
-                "message": "No data available"
-            }), 404
+                "status": "ok",
+                "avg_duration": 0,
+                "overall_dominant_emotion": "none",
+                "avg_emotion_percentages": {},
+                "visitor_count": 0,
+                "is_empty": True
+            })
         
         # Calculate average duration
         avg_duration = df['duration_seconds'].mean()
@@ -88,13 +93,41 @@ def emotion_stats():
         # Calculate average percentage for each emotion
         avg_percentages = {emotion: sum(values)/len(values) for emotion, values in emotion_totals.items()}
         
+        # Count number of visitors (rows in CSV)
+        visitor_count = len(df)
+        
         return jsonify({
             "status": "ok",
             "avg_duration": round(avg_duration, 2),
             "overall_dominant_emotion": overall_dominant,
-            "avg_emotion_percentages": avg_percentages
+            "avg_emotion_percentages": avg_percentages,
+            "visitor_count": visitor_count,
+            "is_empty": False
         })
     
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@app.route('/api/clear_data', methods=["POST"])
+def clear_data():
+    try:
+        # Create an empty DataFrame with the same columns
+        df = pd.DataFrame(columns=[
+            "timestamp",
+            "duration_seconds",
+            "dominant_emotion",
+            "emotion_percentages"
+        ])
+        # Write the empty DataFrame to the CSV file
+        df.to_csv(LOG_PATH, index=False)
+        
+        return jsonify({
+            "status": "ok",
+            "message": "Data cleared successfully"
+        })
     except Exception as e:
         return jsonify({
             "status": "error",

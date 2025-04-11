@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const emotionPercentages = document.getElementById('emotion-percentages');
     const lastUpdate = document.getElementById('last-update');
     const refreshButton = document.getElementById('refresh-stats');
+    const clearButton = document.getElementById('clear-data');
+    const confirmClearButton = document.getElementById('confirm-clear');
+    const clearStatus = document.getElementById('clear-status');
+    const visitorCount = document.getElementById('visitor-count');
+    const emptyDataMessage = document.getElementById('empty-data-message');
+    
+    // Bootstrap modal
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     
     // Colors for different emotions
     const emotionColors = {
@@ -26,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingStats.style.display = 'block';
         statsContent.style.display = 'none';
         errorMessage.style.display = 'none';
+        emptyDataMessage.style.display = 'none';
         
         fetch('/api/emotion_stats')
             .then(response => {
@@ -39,6 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     updateStats(data);
                     loadingStats.style.display = 'none';
                     statsContent.style.display = 'block';
+                    
+                    // Show empty data message if needed
+                    emptyDataMessage.style.display = data.is_empty ? 'block' : 'none';
+                    
                     // Update last fetch time
                     const now = new Date();
                     lastUpdate.textContent = `Last updated: ${now.toLocaleTimeString()}`;
@@ -56,6 +69,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update the UI with the fetched statistics
     function updateStats(data) {
+        // Update visitor count
+        visitorCount.textContent = data.visitor_count;
+        
+        // Check if data is empty
+        if (data.is_empty) {
+            // Show custom message for empty data
+            dominantEmotion.textContent = "No data";
+            dominantEmotion.style.color = "#777";
+            
+            avgDuration.textContent = "0";
+            
+            // Show empty state for emotion percentages
+            emotionPercentages.innerHTML = '<div class="alert alert-secondary">No emotion data available. Start tracking to see statistics.</div>';
+            return;
+        }
+        
         // Update dominant emotion
         dominantEmotion.textContent = data.overall_dominant_emotion;
         dominantEmotion.style.color = emotionColors[data.overall_dominant_emotion] || '#333';
@@ -94,8 +123,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Clear all emotion data
+    function clearData() {
+        fetch('/api/clear_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                // Show success message
+                clearStatus.innerHTML = '<div class="alert alert-success">All tracking data has been cleared. New statistics will appear when new sessions are recorded.</div>';
+                clearStatus.style.display = 'block';
+                
+                // Refresh statistics to show updated data
+                fetchEmotionStats();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    clearStatus.style.display = 'none';
+                }, 5000);
+            } else {
+                throw new Error(data.message || 'Failed to clear data');
+            }
+        })
+        .catch(error => {
+            console.error('Error clearing data:', error);
+            clearStatus.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+            clearStatus.style.display = 'block';
+        });
+    }
+    
     // Event listeners
     refreshButton.addEventListener('click', fetchEmotionStats);
+    
+    clearButton.addEventListener('click', function() {
+        confirmModal.show();
+    });
+    
+    confirmClearButton.addEventListener('click', function() {
+        confirmModal.hide();
+        clearData();
+    });
     
     // Initial fetch
     fetchEmotionStats();

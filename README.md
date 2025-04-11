@@ -8,6 +8,8 @@ This application provides a web-based user interface for emotion tracking using 
 - Tracks emotion sessions and calculates statistics
 - Web UI for monitoring and visualization
 - Stores historical emotion data
+- Counts total number of visitors (sessions)
+- Option to clear stored data when needed
 
 ## Requirements
 
@@ -46,10 +48,13 @@ http://localhost:5000
 
 - The left panel shows the live camera feed with face detection and emotion labeling
 - The right panel displays statistics calculated from the stored emotion data:
+  - Total number of visitors (sessions)
   - Dominant emotion across all sessions
   - Average session duration
   - Distribution of emotions as percentages
-- The "Refresh Statistics" button updates the statistics from the latest data
+- Data Management section:
+  - "Refresh Statistics" button updates the statistics from the latest data
+  - "Clear All Data" button removes all stored emotion data (with confirmation)
 
 ## How It Works
 

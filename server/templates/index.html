@@ -41,6 +41,17 @@
                         </div>
                         
                         <div id="stats-content" style="display: none;">
+                            <div id="empty-data-message" class="alert alert-info mb-3" style="display: none;">
+                                No emotion data has been recorded yet. Statistics will appear here when sessions are detected.
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h5>Visitor Count</h5>
+                                <div class="alert alert-primary">
+                                    <span id="visitor-count" class="fs-4">-</span> visitors
+                                </div>
+                            </div>
+                            
                             <div class="mb-3">
                                 <h5>Dominant Emotion</h5>
                                 <div class="alert alert-info">
@@ -71,12 +82,35 @@
                 
                 <div class="card">
                     <div class="card-header bg-info text-white">
-                        <h4 class="mb-0">Last Update</h4>
+                        <h4 class="mb-0">Data Management</h4>
                     </div>
                     <div class="card-body">
                         <p id="last-update">-</p>
-                        <button id="refresh-stats" class="btn btn-primary">Refresh Statistics</button>
+                        <div class="d-flex justify-content-between gap-2">
+                            <button id="refresh-stats" class="btn btn-primary flex-grow-1">Refresh Statistics</button>
+                            <button id="clear-data" class="btn btn-danger flex-grow-1">Clear All Data</button>
+                        </div>
+                        <div id="clear-status" class="mt-2" style="display: none;"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Data Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to clear all emotion tracking data? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirm-clear">Yes, Clear Data</button>
                 </div>
             </div>
         </div>
