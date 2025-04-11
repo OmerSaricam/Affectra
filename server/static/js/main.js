@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const visitorCount = document.getElementById('visitor-count');
     const emptyDataMessage = document.getElementById('empty-data-message');
     
+    // Camera selection elements
+    const loadingCameras = document.getElementById('loading-cameras');
+    const cameraList = document.getElementById('camera-list');
+    const cameraOptions = document.getElementById('camera-options');
+    const cameraStatus = document.getElementById('camera-status');
+    const esp32Form = document.getElementById('esp32-form');
+    
     // Bootstrap modal
     const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     
@@ -192,7 +199,174 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Event listeners
+    // CAMERA MANAGEMENT FUNCTIONS
+    
+    // Fetch available camera sources
+    function fetchCameras() {
+        loadingCameras.style.display = 'block';
+        cameraList.style.display = 'none';
+        
+        secureFetch('/cameras')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch camera sources');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateCameraList(data.available_cameras, data.active_camera);
+                loadingCameras.style.display = 'none';
+                cameraList.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching cameras:', error);
+                loadingCameras.style.display = 'none';
+                cameraStatus.innerHTML = `<div class="alert alert-danger">Failed to load camera sources: ${sanitizeHtml(error.message)}</div>`;
+                cameraStatus.style.display = 'block';
+                
+                setTimeout(() => {
+                    cameraStatus.style.display = 'none';
+                }, 5000);
+            });
+    }
+    
+    // Update the camera selection UI
+    function updateCameraList(cameras, activeCamera) {
+        cameraOptions.innerHTML = '';
+        
+        if (cameras.length === 0) {
+            cameraOptions.innerHTML = '<div class="text-muted">No cameras available</div>';
+            return;
+        }
+        
+        cameras.forEach(camera => {
+            const isActive = camera === activeCamera;
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = `list-group-item list-group-item-action ${isActive ? 'active' : ''}`;
+            item.textContent = sanitizeHtml(camera);
+            
+            if (isActive) {
+                item.innerHTML += ' <span class="badge bg-success ms-2">Active</span>';
+            }
+            
+            item.addEventListener('click', () => selectCamera(camera));
+            cameraOptions.appendChild(item);
+        });
+    }
+    
+    // Select a camera source
+    function selectCamera(cameraName) {
+        // Create form data
+        const formData = new FormData();
+        formData.append('csrf_token', csrfToken);
+        formData.append('camera_name', cameraName);
+        
+        // Show loading state
+        cameraStatus.innerHTML = `<div class="alert alert-info">Switching to camera: ${sanitizeHtml(cameraName)}...</div>`;
+        cameraStatus.style.display = 'block';
+        
+        fetch('/select_camera', {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to switch camera');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                cameraStatus.innerHTML = `<div class="alert alert-success">${sanitizeHtml(data.message)}</div>`;
+                // Refresh camera list
+                fetchCameras();
+            } else {
+                throw new Error(data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            console.error('Error switching camera:', error);
+            cameraStatus.innerHTML = `<div class="alert alert-danger">Error: ${sanitizeHtml(error.message)}</div>`;
+        })
+        .finally(() => {
+            // Hide status after 3 seconds
+            setTimeout(() => {
+                cameraStatus.style.display = 'none';
+            }, 3000);
+        });
+    }
+    
+    // Add ESP32-CAM source
+    function addESP32Camera(event) {
+        event.preventDefault();
+        
+        // Get form values
+        const url = document.getElementById('esp32-url').value.trim();
+        const name = document.getElementById('esp32-name').value.trim();
+        
+        if (!url) {
+            cameraStatus.innerHTML = '<div class="alert alert-danger">Please enter a valid URL</div>';
+            cameraStatus.style.display = 'block';
+            return;
+        }
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('csrf_token', csrfToken);
+        formData.append('url', url);
+        if (name) {
+            formData.append('name', name);
+        }
+        
+        // Show loading state
+        cameraStatus.innerHTML = '<div class="alert alert-info">Adding ESP32-CAM source...</div>';
+        cameraStatus.style.display = 'block';
+        
+        fetch('/add_esp32_camera', {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add ESP32-CAM');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                cameraStatus.innerHTML = `<div class="alert alert-success">${sanitizeHtml(data.message)}</div>`;
+                
+                // Reset form
+                document.getElementById('esp32-url').value = '';
+                document.getElementById('esp32-name').value = '';
+                
+                // Collapse the form
+                const bsCollapse = bootstrap.Collapse.getInstance(document.getElementById('addCameraForm'));
+                if (bsCollapse) {
+                    bsCollapse.hide();
+                }
+                
+                // Ask user if they want to switch to the new camera
+                if (confirm(`Do you want to switch to the new camera (${data.camera_name})?`)) {
+                    selectCamera(data.camera_name);
+                } else {
+                    // Just refresh the camera list
+                    fetchCameras();
+                }
+            } else {
+                throw new Error(data.error || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding ESP32-CAM:', error);
+            cameraStatus.innerHTML = `<div class="alert alert-danger">Error: ${sanitizeHtml(error.message)}</div>`;
+        });
+    }
+
+    // Event listeners for existing functions
     refreshButton.addEventListener('click', fetchEmotionStats);
     
     clearButton.addEventListener('click', function() {
@@ -204,9 +378,14 @@ document.addEventListener('DOMContentLoaded', function() {
         clearData();
     });
     
-    // Initial fetch
-    fetchEmotionStats();
+    // Event listeners for camera management
+    esp32Form.addEventListener('submit', addESP32Camera);
     
-    // Refresh data every 30 seconds
+    // Initial fetches
+    fetchEmotionStats();
+    fetchCameras();
+    
+    // Refresh data periodically
     setInterval(fetchEmotionStats, 30000);
+    setInterval(fetchCameras, 10000);
 }); 

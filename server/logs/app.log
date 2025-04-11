@@ -153,3 +153,61 @@
 2025-04-11 20:25:15,202 - affectra - INFO - Logged emotion session: neutral, duration: 5.77s
 2025-04-11 20:25:15,202 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:15] "POST /log HTTP/1.1" 200 -
 2025-04-11 20:25:15,228 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 20:25:15] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 21:09:00,067 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.24.89:5000
+2025-04-11 21:09:00,067 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 21:09:00,068 - werkzeug - INFO -  * Restarting with stat
+2025-04-11 21:09:01,702 - werkzeug - WARNING -  * Debugger is active!
+2025-04-11 21:09:01,702 - werkzeug - INFO -  * Debugger PIN: 110-626-722
+2025-04-11 21:09:10,471 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:10] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 21:09:11,834 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "GET / HTTP/1.1" 200 -
+2025-04-11 21:09:11,868 - camera_provider - INFO - Added camera source: Default_Webcam
+2025-04-11 21:09:11,873 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "[36mGET /static/images/affectra-logo.png HTTP/1.1[0m" 304 -
+2025-04-11 21:09:11,873 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-11 21:09:11,901 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-04-11 21:09:11,914 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:11,923 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:11] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 21:09:13,011 - camera_provider - INFO - Connected to webcam at index 0
+2025-04-11 21:09:13,011 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:13,011 - camera_provider - INFO - Added camera source: Default_Webcam
+2025-04-11 21:09:14,013 - camera_provider - ERROR - Failed to connect to webcam at index 0
+2025-04-11 21:09:15,550 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:15,550 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:15] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:15,555 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:15] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:15,755 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:15] "GET /video_feed HTTP/1.1" 200 -
+2025-04-11 21:09:21,917 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:21] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:24,848 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:24] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 21:09:27,251 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:27,254 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:27] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:27,265 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:27] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:27,755 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:27,761 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:27] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:27,781 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:27] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:28,208 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:28,210 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:28] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:28,228 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:28] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:30,224 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:30,227 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:30] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:30,239 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:30] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:30,863 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:30,865 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:30] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:30,878 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:30] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:31,911 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:31] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:35,019 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:35,023 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:35] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:35,037 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:35] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:41,929 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:41] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:41,932 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:41] "GET /api/emotion_stats HTTP/1.1" 200 -
+2025-04-11 21:09:50,035 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:50,036 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:50] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:50,044 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:50] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:50,565 - camera_provider - INFO - Switched to camera source: Default_Webcam
+2025-04-11 21:09:50,567 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:50] "POST /select_camera HTTP/1.1" 200 -
+2025-04-11 21:09:50,576 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:50] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:09:51,912 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:09:51] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:10:01,914 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:10:01] "GET /cameras HTTP/1.1" 200 -
+2025-04-11 21:10:02,345 - affectra - INFO - Logged emotion session: sad, duration: 46.59s
+2025-04-11 21:10:02,346 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:10:02] "POST /log HTTP/1.1" 200 -
+2025-04-11 21:10:02,733 - werkzeug - INFO - 127.0.0.1 - - [11/Apr/2025 21:10:02] "GET /api/emotion_stats HTTP/1.1" 200 -

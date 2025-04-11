@@ -33,6 +33,7 @@ logger = logging.getLogger("affectra")
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from client.camera_tracker import CameraTracker
 from client.security import get_api_key, verify_signature, DataEncryption
+from client.camera_provider import CameraManager, create_webcam_source, create_esp32cam_source
 
 # Initialize Flask application with proper folder configuration
 app = Flask(__name__, 
@@ -281,23 +282,37 @@ def init_camera_tracker():
         camera_tracker = CameraTracker()
     return camera_tracker
 
-# Initialize camera
-camera = None
+# Camera manager for different video sources
+camera_manager = None
 
-def get_camera():
+def init_camera_manager():
     """
-    Initialize or return the existing camera instance.
-    Uses a global variable to maintain the same camera across requests.
+    Initialize or return the existing camera manager instance.
+    Uses a global variable to maintain the same camera manager across requests.
     
     Returns:
-        An OpenCV VideoCapture object
+        An instance of CameraManager
     """
-    global camera
-    if camera is None:
-        camera = cv2.VideoCapture(0)
-        # Wait for the camera to initialize
-        time.sleep(1)
-    return camera
+    global camera_manager
+    if camera_manager is None:
+        camera_manager = CameraManager()
+        # Add default webcam source
+        webcam = create_webcam_source(0, "Default_Webcam")
+        camera_manager.add_source(webcam)
+        camera_manager.set_active_source("Default_Webcam")
+        
+        # Load any configured camera sources from settings
+        # For now, we'll add a placeholder for ESP32-CAM if URL is in environment
+        esp32_url = os.environ.get('ESP32_CAM_URL')
+        if esp32_url:
+            try:
+                esp32 = create_esp32cam_source(esp32_url)
+                camera_manager.add_source(esp32)
+                logger.info(f"Added ESP32-CAM source: {esp32.name}")
+            except Exception as e:
+                logger.error(f"Failed to initialize ESP32-CAM: {e}")
+    
+    return camera_manager
 
 def gen_frames():
     """
@@ -308,13 +323,15 @@ def gen_frames():
     Yields:
         JPEG image data of each processed frame
     """
-    camera = get_camera()
+    manager = init_camera_manager()
     tracker = init_camera_tracker()
     
     while True:
-        success, frame = camera.read()
+        success, frame = manager.read()
         if not success:
-            break
+            # Wait briefly before trying again
+            time.sleep(0.1)
+            continue
         else:
             try:
                 # Process frame with emotion tracker
@@ -331,6 +348,17 @@ def gen_frames():
                                 (0, 255, 0), 
                                 2)
                 
+                # Add camera source info
+                active_camera = manager.active_source_name
+                if active_camera:
+                    cv2.putText(processed_frame, 
+                                f"Camera: {active_camera}", 
+                                (10, processed_frame.shape[0] - 10), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 
+                                0.6, 
+                                (255, 255, 255), 
+                                1)
+                
                 # Convert frame to jpg format
                 ret, buffer = cv2.imencode('.jpg', processed_frame)
                 frame = buffer.tobytes()
@@ -338,7 +366,7 @@ def gen_frames():
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
             except Exception as e:
                 logger.error(f"Error generating frame: {e}")
-                break
+                time.sleep(0.1)
 
 @app.route('/video_feed')
 def video_feed():
@@ -351,6 +379,93 @@ def video_feed():
     """
     return Response(gen_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/cameras')
+def list_cameras():
+    """
+    List available camera sources
+    
+    Returns:
+        JSON list of available cameras and the active camera
+    """
+    manager = init_camera_manager()
+    sources = list(manager.sources.keys())
+    active = manager.active_source_name
+    
+    return jsonify({
+        "available_cameras": sources,
+        "active_camera": active
+    })
+
+@app.route('/select_camera', methods=['POST'])
+def select_camera():
+    """
+    Select a camera source
+    
+    Returns:
+        JSON response indicating success or failure
+    """
+    # Verify CSRF token
+    token = request.form.get('csrf_token')
+    if not token or token != session.get('csrf_token'):
+        abort(403)
+    
+    camera_name = request.form.get('camera_name')
+    if not camera_name:
+        return jsonify({"success": False, "error": "No camera name provided"}), 400
+    
+    manager = init_camera_manager()
+    if camera_name not in manager.sources:
+        return jsonify({"success": False, "error": f"Camera '{camera_name}' not found"}), 404
+    
+    success = manager.set_active_source(camera_name)
+    
+    if success:
+        return jsonify({"success": True, "message": f"Switched to camera: {camera_name}"})
+    else:
+        return jsonify({"success": False, "error": f"Failed to switch to camera: {camera_name}"}), 500
+
+@app.route('/add_esp32_camera', methods=['POST'])
+def add_esp32_camera():
+    """
+    Add a new ESP32-CAM source
+    
+    Returns:
+        JSON response indicating success or failure
+    """
+    # Verify CSRF token
+    token = request.form.get('csrf_token')
+    if not token or token != session.get('csrf_token'):
+        abort(403)
+    
+    url = request.form.get('url')
+    name = request.form.get('name')
+    
+    if not url:
+        return jsonify({"success": False, "error": "No camera URL provided"}), 400
+    
+    try:
+        manager = init_camera_manager()
+        
+        # Create ESP32-CAM source
+        esp32 = create_esp32cam_source(url, name)
+        
+        # Check if a source with this name already exists
+        if esp32.name in manager.sources:
+            return jsonify({"success": False, "error": f"Camera '{esp32.name}' already exists"}), 400
+        
+        # Add the source
+        manager.add_source(esp32)
+        
+        return jsonify({
+            "success": True, 
+            "message": f"Added ESP32-CAM source: {esp32.name}",
+            "camera_name": esp32.name
+        })
+    
+    except Exception as e:
+        logger.error(f"Error adding ESP32-CAM: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     logger.info("Starting Affectra application server")

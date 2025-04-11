@@ -4,6 +4,7 @@ from deepface import DeepFace
 from client.emotion_utils import EmotionSession
 import requests
 import numpy as np
+from client.camera_provider import CameraManager, create_webcam_source, create_esp32cam_source
 
 class CameraTracker:
     """
@@ -26,17 +27,74 @@ class CameraTracker:
         self.current_frame = None
         self.current_emotion = None
         self.face_region = None
-
-    def process_frame(self, frame):
+        
+        # Initialize camera manager
+        self.camera_manager = CameraManager()
+        
+        # Add default webcam source
+        webcam = create_webcam_source(0, "Default_Webcam")
+        self.camera_manager.add_source(webcam)
+        self.camera_manager.set_active_source("Default_Webcam")
+        
+    def add_camera_source(self, source):
         """
-        Process a single video frame for emotion detection and tracking.
+        Add a new camera source to the tracker
         
         Args:
-            frame: Video frame from camera feed (numpy array)
+            source: CameraSource instance
+        """
+        self.camera_manager.add_source(source)
+    
+    def switch_camera(self, camera_name):
+        """
+        Switch to a different camera source
+        
+        Args:
+            camera_name: Name of the camera to switch to
+        
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        return self.camera_manager.set_active_source(camera_name)
+    
+    def get_available_cameras(self):
+        """
+        Get list of available camera sources
+        
+        Returns:
+            List of camera source names
+        """
+        return list(self.camera_manager.sources.keys())
+    
+    def get_active_camera(self):
+        """
+        Get the name of the active camera
+        
+        Returns:
+            Name of the active camera or None if no active camera
+        """
+        return self.camera_manager.active_source_name
+
+    def process_frame(self, frame=None):
+        """
+        Process a single video frame for emotion detection and tracking.
+        If no frame is provided, reads from the active camera source.
+        
+        Args:
+            frame: Optional video frame. If None, reads from camera.
             
         Returns:
             Processed frame with visualization elements added
         """
+        # If no frame provided, read from camera
+        if frame is None:
+            success, frame = self.camera_manager.read()
+            if not success:
+                # Return the last successful frame or a blank one
+                if self.current_frame is not None:
+                    return self.current_frame
+                return np.zeros((480, 640, 3), dtype=np.uint8)
+        
         # Store current frame for reference
         self.current_frame = frame.copy()
         current_time = time.time()
@@ -72,7 +130,7 @@ class CameraTracker:
                 self.last_detection_time = current_time
 
             # Reset no-face timer since face is detected
-            self.no_face_start_time = None  
+            self.no_face_start_time = None
 
         except Exception:
             # No face detected in this frame
@@ -138,41 +196,68 @@ class CameraTracker:
             String representing the current emotion or None if no face detected
         """
         return self.current_emotion
+        
+    def __del__(self):
+        """Clean up resources when the object is deleted"""
+        self.camera_manager.release_all()
 
 def start_camera():
     """
     Standalone function to start the camera and emotion tracking.
     Creates a window showing the processed camera feed with emotions.
     """
-    # Initialize camera
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("❌ Cannot access the camera.")
-        return
-
     print("🎥 Affectra session tracking (DeepFace-based) started. Press 'q' to quit.")
     
     # Create tracker instance
     tracker = CameraTracker()
+    
+    # Add an ESP32-CAM source if URL is provided
+    esp32_url = input("Enter ESP32-CAM URL (leave empty to use webcam only): ")
+    if esp32_url:
+        try:
+            esp32_source = create_esp32cam_source(esp32_url)
+            tracker.add_camera_source(esp32_source)
+            
+            # Ask if we should switch to ESP32-CAM
+            use_esp32 = input("Use ESP32-CAM as default camera? (y/n): ").lower() == 'y'
+            if use_esp32:
+                tracker.switch_camera(esp32_source.name)
+        except Exception as e:
+            print(f"❌ Error setting up ESP32-CAM: {e}")
 
     # Main processing loop
     while True:
-        ret, frame = cap.read()
-        if not ret:
-            print("❌ Failed to grab frame.")
-            break
-
-        # Process frame with emotion detection
-        processed_frame = tracker.process_frame(frame)
+        # Process frame with emotion detection (reads from active camera)
+        processed_frame = tracker.process_frame()
+        
+        # Display available cameras and current selection
+        available_cameras = tracker.get_available_cameras()
+        active_camera = tracker.get_active_camera()
+        camera_info = f"Active: {active_camera} | Available: {', '.join(available_cameras)}"
+        
+        # Add camera info to the frame
+        cv2.putText(processed_frame, camera_info, (10, processed_frame.shape[0] - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        
         cv2.imshow("Affectra Camera Feed", processed_frame)
 
-        # Exit on 'q' key press
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        # Get key press
+        key = cv2.waitKey(1) & 0xFF
+        
+        # Handle key commands
+        if key == ord('q'):  # Quit
             print("👋 Exiting...")
             break
+        elif key == ord('w'):  # Switch to webcam
+            webcam_sources = [name for name in available_cameras if name.startswith("Webcam")]
+            if webcam_sources:
+                tracker.switch_camera(webcam_sources[0])
+        elif key == ord('e'):  # Switch to ESP32-CAM
+            esp32_sources = [name for name in available_cameras if name.startswith("ESP32")]
+            if esp32_sources:
+                tracker.switch_camera(esp32_sources[0])
 
     # Clean up resources
-    cap.release()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
