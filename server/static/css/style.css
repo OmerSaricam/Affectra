@@ -7,6 +7,44 @@ body {
     max-width: 1200px;
 }
 
+/* Logo and Header Styles */
+.header-section {
+    margin-bottom: 2rem;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.app-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+}
+
+.app-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.2));
+}
+
+h1 {
+    color: #333;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #2b5876, #4e4376);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
 .card {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -54,11 +92,6 @@ body {
     margin-bottom: 5px;
 }
 
-h1 {
-    color: #333;
-    font-weight: bold;
-}
-
 /* Style for the buttons */
 .btn-primary, .btn-danger {
     font-weight: bold;
@@ -85,4 +118,25 @@ h1 {
 #clear-status .alert {
     margin-bottom: 0;
     margin-top: 10px;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .app-logo {
+        width: 120px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .app-logo {
+        width: 100px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
 } 
