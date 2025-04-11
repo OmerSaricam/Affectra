@@ -12,13 +12,15 @@ import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from client.camera_tracker import CameraTracker
 
+# Initialize Flask application with proper folder configuration
 app = Flask(__name__, 
             static_folder="static",
             template_folder="templates")
 
+# Path to the CSV file for storing emotion session data
 LOG_PATH = "server/storage/affectra_log.csv"
 
-# CSV dosyası yoksa başlıkla oluştur
+# Create the CSV file with headers if it doesn't exist
 if not os.path.exists(LOG_PATH):
     df = pd.DataFrame(columns=[
         "timestamp",
@@ -30,14 +32,28 @@ if not os.path.exists(LOG_PATH):
 
 @app.route("/log", methods=["POST"])
 def log_emotion():
+    """
+    API endpoint for receiving and logging emotion data from the client.
+    Accepts JSON data containing emotion session information and saves it to CSV.
+    
+    Expected JSON data:
+        - timestamp: When the session occurred
+        - duration_seconds: How long the session lasted
+        - dominant_emotion: Most frequent emotion detected
+        - emotion_percentages: Distribution of emotions as percentages
+    
+    Returns:
+        JSON response indicating success or failure
+    """
     data = request.get_json()
     if not data:
         return jsonify({"status": "error", "message": "No data received"}), 400
 
-    # Yüzdeleri string'e çevir (JSON.stringify'den gelen dict)
+    # Convert emotion percentages dictionary to string format for CSV storage
     percentages = data.get("emotion_percentages", {})
     percentages_str = ", ".join([f"{k}: {v}%" for k, v in percentages.items()])
 
+    # Prepare row data for CSV
     row = {
         "timestamp": data.get("timestamp", datetime.now().isoformat()),
         "duration_seconds": data.get("duration_seconds", 0),
@@ -45,6 +61,7 @@ def log_emotion():
         "emotion_percentages": percentages_str
     }
 
+    # Append the new data to the CSV file
     df = pd.read_csv(LOG_PATH)
     df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
     df.to_csv(LOG_PATH, index=False)
@@ -53,10 +70,28 @@ def log_emotion():
 
 @app.route('/')
 def index():
+    """
+    Serve the main web interface for the application.
+    
+    Returns:
+        Rendered HTML template for the UI
+    """
     return render_template('index.html')
 
 @app.route('/api/emotion_stats')
 def emotion_stats():
+    """
+    API endpoint to retrieve analyzed emotion statistics.
+    Reads from the CSV log file and calculates aggregate statistics.
+    
+    Returns:
+        JSON containing:
+        - Average session duration
+        - Overall dominant emotion
+        - Average percentages for each emotion
+        - Total visitor count
+        - Empty state flag
+    """
     try:
         df = pd.read_csv(LOG_PATH)
         
@@ -113,6 +148,13 @@ def emotion_stats():
 
 @app.route('/api/clear_data', methods=["POST"])
 def clear_data():
+    """
+    API endpoint to clear all stored emotion data.
+    Creates a new empty CSV file with only the headers.
+    
+    Returns:
+        JSON response indicating success or failure
+    """
     try:
         # Create an empty DataFrame with the same columns
         df = pd.DataFrame(columns=[
@@ -138,6 +180,13 @@ def clear_data():
 camera_tracker = None
 
 def init_camera_tracker():
+    """
+    Initialize or return the existing camera tracker instance.
+    Uses a global variable to maintain the same tracker across requests.
+    
+    Returns:
+        An instance of CameraTracker
+    """
     global camera_tracker
     if camera_tracker is None:
         camera_tracker = CameraTracker()
@@ -147,6 +196,13 @@ def init_camera_tracker():
 camera = None
 
 def get_camera():
+    """
+    Initialize or return the existing camera instance.
+    Uses a global variable to maintain the same camera across requests.
+    
+    Returns:
+        An OpenCV VideoCapture object
+    """
     global camera
     if camera is None:
         camera = cv2.VideoCapture(0)
@@ -155,6 +211,14 @@ def get_camera():
     return camera
 
 def gen_frames():
+    """
+    Generator function to continuously yield video frames.
+    Processes each frame with emotion detection before yielding.
+    Used by the video_feed route to implement streaming.
+    
+    Yields:
+        JPEG image data of each processed frame
+    """
     camera = get_camera()
     tracker = init_camera_tracker()
     
@@ -189,6 +253,13 @@ def gen_frames():
 
 @app.route('/video_feed')
 def video_feed():
+    """
+    Endpoint to stream the processed video feed.
+    Uses multipart response to continuously stream JPEG images.
+    
+    Returns:
+        Streaming response with processed camera frames
+    """
     return Response(gen_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
